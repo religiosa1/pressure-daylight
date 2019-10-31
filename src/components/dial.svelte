@@ -1,13 +1,21 @@
 <script>
   import range from "../range";
   import timeToDeg from "../time-to-deg";
+  import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
   export let times;
 
-  const size = 300;
+  const size = 306;
+  const padding = 3;
   const hsize = size/2
   const width = 20;
-  const radius = hsize - width/2;
+  const radius = hsize - width/2 - padding;
+
+  function sectionHover(section) {
+    dispatch("sectionHover", section);
+  }
 
   let hours = range(24).map( h => {
     let d = new Date('2000-01-01T00:00:00');
@@ -143,12 +151,15 @@
     stroke-width: 20px;
     fill: none;
   }
+  .ring:hover {
+    filter: drop-shadow(0 0 2px blue);
+  }
 
   .hour-line,
   .time-mark {
     fill: none;
     stroke-width: 1px;
-    stroke: rgba(255, 0, 255, 0.5);
+    stroke: rgba(255, 122, 255, 0.5);
     mix-blend-mode: difference;
   }
 
@@ -156,7 +167,7 @@
     font-size: 9px;
     text-anchor: middle;
     mix-blend-mode: difference;
-    fill: #0FF;
+    fill: #aFF;
   }
 
 
@@ -198,6 +209,7 @@
     d={calculatePath(section)}
     stroke={section.stroke}
     class={"ring ring-" + section.id}
+    on:mouseover={e=>sectionHover(section)}
   />
   {/each}
 
@@ -206,11 +218,11 @@
     class='hour-line'
     x1="50%"
     x2="50%"
-    y1='0'
-    y2='3'
+    y1={padding}
+    y2={padding + 3}
     transform='rotate({15 * hour.value} {hsize} {hsize})'
   />
-  <text x="50%" y="14" transform='rotate({hour.offset} {hsize} {hsize})' class="hour-label">{hour.value}</text>
+  <text x="50%" y={padding + 14} transform='rotate({hour.offset} {hsize} {hsize})' class="hour-label">{hour.value}</text>
   {/each}
 
   {#each markers as marker}
@@ -218,8 +230,8 @@
     class={"time-mark "  + marker.class}
     x1="50%"
     x2="50%"
-    y1='0'
-    y2='20'
+    y1={padding}
+    y2={padding + width}
     transform='rotate({marker.offset} {hsize} {hsize})'
   />
   {/each}

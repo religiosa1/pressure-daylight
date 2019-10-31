@@ -1,10 +1,18 @@
 <script>
   import {onMount} from "svelte";
+  import { slide } from 'svelte/transition';
+  import { quintOut } from 'svelte/easing';
+
+  import {tableView} from "./clock.store";
+
   import Dial from "./dial.svelte";
+  import TimesList from "./times-list.svelte";
+  import Menu from "./menu.svelte";
 
   import timeToDeg from "../time-to-deg";
 
   export let times;
+
 
   let time = new Date();
 
@@ -27,11 +35,13 @@
   }
   function toggleOffset() {
     offseted = !offseted;
-    offsetStyle();
   }
 </script>
 
 <style>
+.clock {
+  position: relative;
+}
   .clock-wrapper {
     border-radius: 50%;
     width: 85vmin;
@@ -53,12 +63,24 @@
   .top-marker-visible {
     opacity: 1;
   }
-
+  .table {
+    padding: 20px;
+  }
 </style>
 
 <div class="clock">
-  <div class="top-marker" class:top-marker-visible={offseted}></div>
-  <div class="clock-wrapper" on:click={toggleOffset} style={offset}>
-    <Dial times={times} />
+  <Menu />
+
+  {#if !$tableView}
+  <div class="dial" transition:slide="{{ duration: 300, easing: quintOut }}">
+    <div class="top-marker" class:top-marker-visible={offseted}></div>
+    <div class="clock-wrapper" on:click={toggleOffset} style={offset}>
+      <Dial times={times} />
+    </div>
   </div>
+  {:else}
+  <div class="table" transition:slide="{{ duration: 300, easing: quintOut }}">
+    <TimesList times={times} />
+  </div>
+  {/if}
 </div>

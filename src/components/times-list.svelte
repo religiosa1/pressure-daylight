@@ -8,6 +8,7 @@
 <style>
   .times-list {
     border-collapse: collapse;
+    margin: auto;
   }
   th, td {
     padding: 7px 5px;

@@ -2,7 +2,6 @@
   import { onMount } from 'svelte';
 
   import SunCalc from "suncalc";
-  import TimesList from "./components/times-list.svelte";
   import Clock from "./components/clock.svelte";
 
   let day = new Date();
@@ -34,5 +33,3 @@
 </style>
 
 <Clock times={times} />
-
-<TimesList times={times} />
