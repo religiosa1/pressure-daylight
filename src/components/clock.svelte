@@ -6,6 +6,7 @@
   import {tableView} from "./clock.store";
 
   import Dial from "./dial.svelte";
+  import SectionInfo from "./section-info.svelte";
   import TimesList from "./times-list.svelte";
   import Menu from "./menu.svelte";
 
@@ -13,11 +14,20 @@
 
   export let times;
 
-
   let time = new Date();
 
   let offseted = true;
   $: offset = offsetStyle(offseted);
+  $: section = null;
+
+  function updateSection(e) {
+    if (e && e.detail) {
+      section = e.detail;
+    }
+    else {
+      section = null;
+    }
+  }
 
   onMount(()=>{
     const interval = setInterval(() => {
@@ -75,12 +85,13 @@
   <div class="dial" transition:slide="{{ duration: 300, easing: quintOut }}">
     <div class="top-marker" class:top-marker-visible={offseted}></div>
     <div class="clock-wrapper" on:click={toggleOffset} style={offset}>
-      <Dial times={times} />
+      <Dial {times} on:sectionHover={updateSection}/>
     </div>
+    <SectionInfo {section} />
   </div>
   {:else}
   <div class="table" transition:slide="{{ duration: 300, easing: quintOut }}">
-    <TimesList times={times} />
+    <TimesList {times} />
   </div>
   {/if}
 </div>

@@ -32,4 +32,4 @@
 <style>
 </style>
 
-<Clock times={times} />
+<Clock {times} />

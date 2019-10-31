@@ -161,6 +161,10 @@
     stroke-width: 1px;
     stroke: rgba(255, 122, 255, 0.5);
     mix-blend-mode: difference;
+    transition: stroke 0.2s ease;
+  }
+  .time-mark:hover {
+    stroke: rgba(255,255,255,0.8);
   }
 
   .hour-label {
@@ -209,7 +213,8 @@
     d={calculatePath(section)}
     stroke={section.stroke}
     class={"ring ring-" + section.id}
-    on:mouseover={e=>sectionHover(section)}
+    on:mouseover={()=>sectionHover(section)}
+    on:mouseleave={()=>sectionHover()}
   />
   {/each}
 
@@ -233,6 +238,8 @@
     y1={padding}
     y2={padding + width}
     transform='rotate({marker.offset} {hsize} {hsize})'
+    on:mouseover={()=>sectionHover(marker)}
+    on:mouseleave={()=>sectionHover()}
   />
   {/each}
 </svg>
