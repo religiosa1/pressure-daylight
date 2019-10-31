@@ -9,6 +9,9 @@
     "start:dev": "sirv public --single --dev",
     "test": "npx jest"
   },
+  "browserslist": [
+    "last 2 versions"
+  ],
   "devDependencies": {
     "autoprefixer": "^9.6.1",
     "eslint": "^6.4.0",

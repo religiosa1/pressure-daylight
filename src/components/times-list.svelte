@@ -6,66 +6,98 @@
 </script>
 
 <style>
-.times-list dt {
-  display: inline-block;
-  padding: 0;
-  margin: 0;
-  font-weight: bold;
-}
-.times-list dt::after {
-  content: ": ";
-  margin-right: 1ex;
-}
-.times-list dd {
-  margin: 0;
-  display: inline;
-}
-.times-list dd::after {
-  content: "";
-  display: block;
-}
+  .times-list {
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 7px 5px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #aaa;
+    background: white;
+  }
+  th {
+    font-weight: 600;
+  }
+  tr:nth-child(even) th,
+  tr:nth-child(even) td {
+    background: #EFEFEF;
+  }
+  th:first-child,
+  td:first-child {
+    text-align: right;
+  }
 </style>
 
-<dl class="times-list">
-  <dt>sunrise</dt>
-  <dd>{ moment(times.sunrise).format(FORMAT) }</dd>
-
-  <dt>sunriseEnd</dt>
-  <dd>{ moment(times.sunriseEnd).format(FORMAT) }</dd>
-
-  <dt>goldenHourEnd</dt>
-  <dd>{ moment(times.goldenHourEnd).format(FORMAT) }</dd>
-
-  <dt>solarNoon</dt>
-  <dd>{ moment(times.solarNoon).format(FORMAT) }</dd>
-
-  <dt>goldenHour</dt>
-  <dd>{ moment(times.goldenHour).format(FORMAT) }</dd>
-
-  <dt>sunsetStart</dt>
-  <dd>{ moment(times.sunsetStart).format(FORMAT) }</dd>
-
-  <dt>sunset</dt>
-  <dd>{ moment(times.sunset).format(FORMAT) }</dd>
-
-  <dt>dusk</dt>
-  <dd>{ moment(times.dusk).format(FORMAT) }</dd>
-
-  <dt>nauticalDusk</dt>
-  <dd>{ moment(times.nauticalDusk).format(FORMAT) }</dd>
-
-  <dt>night</dt>
-  <dd>{ moment(times.night).format(FORMAT) }</dd>
-
-  <dt>nadir</dt>
-  <dd>{ moment(times.nadir).format(FORMAT) }</dd>
-
-  <dt>nightEnd</dt>
-  <dd>{ moment(times.nightEnd).format(FORMAT) }</dd>
-
-  <dt>nauticalDawn</dt>
-  <dd>{ moment(times.nauticalDawn).format(FORMAT) }</dd>
-
-  <dt>dawn</dt>
-  <dd>{ moment(times.dawn).format(FORMAT) }</dd>
-</dl>
+<table class="times-list">
+  <tbody>
+    <tr>
+      <th>Астрономические сумерки</th>
+      <td>{ moment(times.nightEnd).format(FORMAT) }</td>
+      <td>{ moment(times.nauticalDawn).format(FORMAT) }</td>
+    </tr>
+    <tr>
+      <th>Навигационные сумерки</th>
+      <td>{ moment(times.nauticalDawn).format(FORMAT) }</td>
+      <td>{ moment(times.dawn).format(FORMAT) }</td>
+    </tr>
+    <tr>
+      <th>Гражданские сумерки</th>
+      <td>{ moment(times.dawn).format(FORMAT) }</td>
+      <td>{ moment(times.sunrise).format(FORMAT) }</td>
+    </tr>
+    <tr>
+      <th>Восход</th>
+      <td>{ moment(times.sunrise).format(FORMAT) }</td>
+      <td>{ moment(times.sunriseEnd).format(FORMAT) }</td>
+    </tr>
+    <tr>
+      <th>Утренний "золотой час"</th>
+      <td>{ moment(times.sunriseEnd).format(FORMAT) }</td>
+      <td>{ moment(times.goldenHourEnd).format(FORMAT) }</td>
+    </tr>
+    <tr>
+      <th>День</th>
+      <td>{ moment(times.goldenHourEnd).format(FORMAT) }</td>
+      <td>{ moment(times.goldenHour).format(FORMAT) }</td>
+    </tr>
+    <tr>
+      <th>Полдень</th>
+      <td colspan="2">{ moment(times.solarNoon).format(FORMAT) }</td>
+    </tr>
+    <tr>
+      <th>Вечерний "золотой час"</th>
+      <td>{ moment(times.goldenHour).format(FORMAT) }</td>
+      <td>{ moment(times.sunsetStart).format(FORMAT) }</td>
+    </tr>
+    <tr>
+      <th>Закат</th>
+      <td>{ moment(times.sunsetStart).format(FORMAT) }</td>
+      <td>{ moment(times.sunset).format(FORMAT) }</td>
+    </tr>
+    <tr>
+      <th>Гражданские сумерки</th>
+      <td>{ moment(times.sunset).format(FORMAT) }</td>
+      <td>{ moment(times.dusk).format(FORMAT) }</td>
+    </tr>
+    <tr>
+      <th>Навигационные сумерки</th>
+      <td>{ moment(times.dusk).format(FORMAT) }</td>
+      <td>{ moment(times.nauticalDusk).format(FORMAT) }</td>
+    </tr>
+    <tr>
+      <th>Астрономические сумерки</th>
+      <td>{ moment(times.nauticalDusk).format(FORMAT) }</td>
+      <td>{ moment(times.night).format(FORMAT) }</td>
+    </tr>
+    <tr>
+      <th>Ночь</th>
+      <td>{ moment(times.night).format(FORMAT) }</td>
+      <td>&mdash;</td>
+    </tr>
+    <tr>
+      <th>Надир</th>
+      <td colspan="2">{ moment(times.nadir).format(FORMAT) }</td>
+    </tr>
+  </tbody>
+</table>
