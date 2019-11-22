@@ -1,11 +1,14 @@
 <script>
   import { onMount } from 'svelte';
 
+  import { latitude, longitude } from "./components/clock.store";
+
   import SunCalc from "suncalc";
   import Clock from "./components/clock.svelte";
 
   let day = new Date();
-  $: times = SunCalc.getTimes(day, 55.7522200, 37.6155600);
+
+  $: times = SunCalc.getTimes(day, $latitude, $longitude);
 
   onMount(() => {
     let day_to;
@@ -28,8 +31,5 @@
     };
   });
 </script>
-
-<style>
-</style>
 
 <Clock {times} />

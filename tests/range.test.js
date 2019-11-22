@@ -1,4 +1,4 @@
-const range = require("../src/range.js");
+const range = require("../src/functions/range.js");
 
 test("Invalid values", () => {
   expect( () => range("asdfasdf") ).toThrow(TypeError);

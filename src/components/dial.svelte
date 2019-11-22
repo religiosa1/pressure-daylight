@@ -1,7 +1,9 @@
 <script>
-  import range from "../range";
-  import timeToDeg from "../time-to-deg";
   import { createEventDispatcher } from 'svelte';
+
+  import range from "../functions/range";
+  import timeToDeg from "../functions/time-to-deg";
+  import { timeRingSections } from "../functions/timeRingSections";
 
 	const dispatch = createEventDispatcher();
 
@@ -26,7 +28,7 @@
     };
   });
 
-  let markers = [
+  $: markers = [
     {
       name: "солнечный полдень",
       time: times.solarNoon,
@@ -41,96 +43,46 @@
     },
   ];
 
-  let ringSections = [
-    {
-      id: "astronomical-twilight-morning",
-      name: "астрономические сумерки",
-      start: times.nightEnd,
-      end: times.nauticalDawn,
-      stroke: "url(#grd-astro)",
-    },
-    {
-      id: "nautical-dawn",
-      name: "навигационные сумерки",
-      start: times.nauticalDawn,
-      end: times.dawn,
-      stroke: "url(#grd-nautic)",
-    },
-    {
-      id: "dawn",
-      name: "гражданские сумерки",
-      start: times.dawn,
-      end: times.sunrise,
-      stroke: "url(#grd-dusk)",
-    },
-    {
-      id: "sunrise",
-      name: "восход",
-      start: times.sunrise,
-      end: times.sunriseEnd,
-      stroke: "url(#grd-sun)",
-    },
-    {
-      id: "golden-hour-morning",
-      name: "золотой час",
-      start: times.sunriseEnd,
-      end: times.goldenHourEnd,
-      stroke: "url(#grd-golden)",
-    },
-    {
-      id: "day",
-      name: "день",
-      start: times.goldenHourEnd,
-      end: times.goldenHour,
-      stroke: "url(#grd-day)",
-    },
-    {
-      id: "golden-hour-evening",
-      name: "золотой час",
-      start: times.goldenHour,
-      end: times.sunsetStart,
-      stroke: "url(#grd-golden)",
-    },
-    {
-      id: "sunset",
-      name: "закат",
-      start: times.sunsetStart,
-      end: times.sunset,
-      stroke: "url(#grd-sun)",
-    },
-    {
-      id: "dusk",
-      name: "гражданские сумерки",
-      start: times.sunset,
-      end: times.dusk,
-      stroke: "url(#grd-dusk)",
-    },
-    {
-      id: "nautical-dusk",
-      name: "навигационные сумерки",
-      start: times.dusk,
-      end: times.nauticalDusk,
-      stroke: "url(#grd-nautic)",
-    },
-    {
-      id: "astronomical-twilight-eveing",
-      name: "астрономические сумерки",
-      start: times.nauticalDusk,
-      end: times.night,
-      stroke: "url(#grd-astro)",
-    },
-    {
-      id: "night",
-      name: "ночь",
-      start: times.night,
-      end: times.nightEnd,
-      stroke: "url(#grd-night)",
-    },
-  ];
+  const colors = {
+    "astronomical-twilight-morning": "url(#grd-astro)",
+    "nautical-dawn": "url(#grd-nautic)",
+    "dawn": "url(#grd-dusk)",
+    "sunrise": "url(#grd-sun)",
+    "golden-hour-morning": "url(#grd-golden)",
+    "day": "url(#grd-day)",
+    "golden-hour-evening": "url(#grd-golden)",
+    "sunset": "url(#grd-sun)",
+    "dusk": "url(#grd-dusk)",
+    "nautical-dusk": "url(#grd-nautic)",
+    "astronomical-twilight-eveing": "url(#grd-astro)",
+    "night": "url(#grd-night)",
+  };
+
+  function colorizeSections(times) {
+    if (!Array.isArray(times)) return [];
+
+    return times.map(i => {
+      if (i.id in colors) {
+        i.stroke = colors[i.id];
+      }
+      return i;
+    });
+  }
+
+  $: ringSections = colorizeSections(timeRingSections(times));
+
+  $: ringSections.forEach(a=>{
+    console.log({
+      ...a,
+      startDeg: timeToDeg(a.start),
+      endDeg: timeToDeg(a.end)
+    })
+  })
 
   function calculatePath(section) {
     let startDeg = timeToDeg(section.start);
     let endDeg = timeToDeg(section.end);
+    let largeArcFlag = (endDeg - startDeg >= 180) ? '1' : '0';
 
     let start_x = size/2 + Math.cos(startDeg * Math.PI / 180 - Math.PI/2) * radius;
     let start_y = size/2 + Math.sin(startDeg * Math.PI / 180 - Math.PI/2) * radius;
@@ -138,7 +90,7 @@
     let end_x = size/2 +  Math.cos(endDeg * Math.PI / 180 - Math.PI/2) * radius;
     let end_y = size/2 +  Math.sin(endDeg * Math.PI / 180 - Math.PI/2) * radius;
 
-    return `M${start_x} ${start_y} A${radius} ${radius} 0 0 1 ${end_x} ${end_y}`;
+    return `M${start_x} ${start_y} A${radius} ${radius} 0 ${largeArcFlag} 1 ${end_x} ${end_y}`;
   }
 </script>
 

@@ -3,14 +3,16 @@
   import { slide } from 'svelte/transition';
   import { quintOut } from 'svelte/easing';
 
-  import {tableView} from "./clock.store";
+  import {tableView, state, ClockState } from "./clock.store";
 
   import Dial from "./dial.svelte";
   import SectionInfo from "./section-info.svelte";
   import TimesList from "./times-list.svelte";
   import Menu from "./menu.svelte";
+  import DateForm from "./date-form.svelte"
+  import PlaceForm from "./place-form.svelte"
 
-  import timeToDeg from "../time-to-deg";
+  import timeToDeg from "../functions/time-to-deg";
 
   export let times;
 
@@ -48,6 +50,38 @@
   }
 </script>
 
+<div class="clock">
+  <Menu />
+
+  <div class="side-form">
+    {#if !$tableView}
+    <div class="dial" transition:slide="{{ duration: 300, easing: quintOut }}">
+      <div class="top-marker" class:top-marker-visible={offseted}></div>
+      <div class="clock-wrapper" on:click={toggleOffset} style={offset}>
+        <Dial {times} on:sectionHover={updateSection} />
+      </div>
+      <SectionInfo {section} />
+    </div>
+    {:else}
+    <div class="table" transition:slide="{{ duration: 300, easing: quintOut }}">
+      <TimesList {times} />
+    </div>
+    {/if}
+  </div>
+
+  {#if $state === ClockState.placeform}
+  <div class="side-form">
+    <PlaceForm />
+  </div>
+  {/if}
+
+  {#if $state === ClockState.dateform}
+  <div class="side-form">
+    <DateForm />
+  </div>
+  {/if}
+</div>
+
 <style>
 .clock {
   position: relative;
@@ -76,22 +110,17 @@
   .table {
     padding: 20px;
   }
+
+  .clock {
+    font-size: 0;
+    text-align: center;
+  }
+  .side-form {
+    text-align: left;
+    display: inline-block;
+    vertical-align: top;
+    margin:auto;
+    width:50%;
+    font-size: 1rem;
+  }
 </style>
-
-<div class="clock">
-  <Menu />
-
-  {#if !$tableView}
-  <div class="dial" transition:slide="{{ duration: 300, easing: quintOut }}">
-    <div class="top-marker" class:top-marker-visible={offseted}></div>
-    <div class="clock-wrapper" on:click={toggleOffset} style={offset}>
-      <Dial {times} on:sectionHover={updateSection}/>
-    </div>
-    <SectionInfo {section} />
-  </div>
-  {:else}
-  <div class="table" transition:slide="{{ duration: 300, easing: quintOut }}">
-    <TimesList {times} />
-  </div>
-  {/if}
-</div>
