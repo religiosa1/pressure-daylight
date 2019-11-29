@@ -19,7 +19,7 @@
     dispatch("sectionHover", section);
   }
 
-  let hours = range(24).map( h => {
+  let hours = Array.from(range(24),  h => {
     let d = new Date('2000-01-01T00:00:00');
     d.setHours(h);
     return {
@@ -44,18 +44,54 @@
   ];
 
   const colors = {
-    "astronomical-twilight-morning": "url(#grd-astro)",
-    "nautical-dawn": "url(#grd-nautic)",
-    "dawn": "url(#grd-dusk)",
-    "sunrise": "url(#grd-sun)",
-    "golden-hour-morning": "url(#grd-golden)",
-    "day": "url(#grd-day)",
-    "golden-hour-evening": "url(#grd-golden)",
-    "sunset": "url(#grd-sun)",
-    "dusk": "url(#grd-dusk)",
-    "nautical-dusk": "url(#grd-nautic)",
-    "astronomical-twilight-eveing": "url(#grd-astro)",
-    "night": "url(#grd-night)",
+    "astronomical-twilight-morning": {
+      stroke: "url(#grd-astro)",
+      name: "астрономические сумерки",
+    },
+    "nautical-dawn": {
+      stroke: "url(#grd-nautic)",
+      name: "навигационные сумерки",
+    },
+    "dawn": {
+      stroke: "url(#grd-dusk)",
+      name: "гражданские сумерки",
+    },
+    "sunrise": {
+      stroke: "url(#grd-sun)",
+      name: "восход",
+    },
+    "golden-hour-morning": {
+      stroke: "url(#grd-golden)",
+      name: "золотой час",
+    },
+    "day": {
+      stroke: "url(#grd-day)",
+      name: "день",
+    },
+    "golden-hour-evening": {
+      stroke: "url(#grd-golden)",
+      name: "золотой час",
+    },
+    "sunset": {
+      stroke: "url(#grd-sun)",
+      name: "закат",
+    },
+    "dusk": {
+      stroke: "url(#grd-dusk)",
+      name: "гражданские сумерки",
+    },
+    "nautical-dusk": {
+      stroke: "url(#grd-nautic)",
+      name: "навигационные сумерки",
+    },
+    "astronomical-twilight-eveing": {
+      stroke: "url(#grd-astro)",
+      name: "астрономические сумерки",
+    },
+    "night": {
+      stroke: "url(#grd-night)",
+      name: "ночь",
+    },
   };
 
   function colorizeSections(times) {
@@ -63,21 +99,14 @@
 
     return times.map(i => {
       if (i.id in colors) {
-        i.stroke = colors[i.id];
+        i.stroke = colors[i.id].stroke;
+        i.name = colors[i.id].name;
       }
       return i;
     });
   }
 
   $: ringSections = colorizeSections(timeRingSections(times));
-
-  $: ringSections.forEach(a=>{
-    console.log({
-      ...a,
-      startDeg: timeToDeg(a.start),
-      endDeg: timeToDeg(a.end)
-    })
-  })
 
   function calculatePath(section) {
     let startDeg = timeToDeg(section.start);

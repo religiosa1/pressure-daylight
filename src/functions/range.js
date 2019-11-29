@@ -1,4 +1,4 @@
-module.exports =  function(start, end, step = 1) {
+module.exports =  function*(start, end, step = 1) {
   if (!Number.isInteger(start)) throw new TypeError("Expect to recieve an integer as the first arg of range");
   if (typeof end === "undefined" || end === null) {
     end = start;
@@ -11,5 +11,7 @@ module.exports =  function(start, end, step = 1) {
   }
   const len = Math.ceil((end - start) / step);
   if (len <= 0) return [];
-  return Array(len).fill().map((_, idx) => start + (idx * step));
+  for (let i = start; i < end; i += step) {
+    yield i;
+  }
 };

@@ -1,77 +1,71 @@
+const sections = [
+  {
+    id: "astronomical-twilight-morning",
+    start: "nightEnd",
+    end: "nauticalDawn",
+  },
+  {
+    id: "nautical-dawn",
+    start: "nauticalDawn",
+    end: "dawn",
+  },
+  {
+    id: "dawn",
+    start: "dawn",
+    end: "sunrise",
+  },
+  {
+    id: "sunrise",
+    start: "sunrise",
+    end: "sunriseEnd",
+  },
+  {
+    id: "golden-hour-morning",
+    start: "sunriseEnd",
+    end: "goldenHourEnd",
+  },
+  {
+    id: "day",
+    start: "goldenHourEnd",
+    end: "goldenHour",
+  },
+  {
+    id: "golden-hour-evening",
+    start: "goldenHour",
+    end: "sunsetStart",
+  },
+  {
+    id: "sunset",
+    start: "sunsetStart",
+    end: "sunset",
+  },
+  {
+    id: "dusk",
+    start: "sunset",
+    end: "dusk",
+  },
+  {
+    id: "nautical-dusk",
+    start: "dusk",
+    end: "nauticalDusk",
+  },
+  {
+    id: "astronomical-twilight-eveing",
+    start: "nauticalDusk",
+    end: "night",
+  },
+  {
+    id: "night",
+    start: "night",
+    end: "nightEnd",
+  },
+];
+
 export function timeRingSections(times) {
   // TODO Проверка что заполнено, а что нет.
-  return [
-      {
-        id: "astronomical-twilight-morning",
-        name: "астрономические сумерки",
-        start: times.nightEnd,
-        end: times.nauticalDawn,
-      },
-      {
-        id: "nautical-dawn",
-        name: "навигационные сумерки",
-        start: times.nauticalDawn,
-        end: times.dawn,
-      },
-      {
-        id: "dawn",
-        name: "гражданские сумерки",
-        start: times.dawn,
-        end: times.sunrise,
-      },
-      {
-        id: "sunrise",
-        name: "восход",
-        start: times.sunrise,
-        end: times.sunriseEnd,
-      },
-      {
-        id: "golden-hour-morning",
-        name: "золотой час",
-        start: times.sunriseEnd,
-        end: times.goldenHourEnd,
-      },
-      {
-        id: "day",
-        name: "день",
-        start: times.goldenHourEnd,
-        end: times.goldenHour,
-      },
-      {
-        id: "golden-hour-evening",
-        name: "золотой час",
-        start: times.goldenHour,
-        end: times.sunsetStart,
-      },
-      {
-        id: "sunset",
-        name: "закат",
-        start: times.sunsetStart,
-        end: times.sunset,
-      },
-      {
-        id: "dusk",
-        name: "гражданские сумерки",
-        start: times.sunset,
-        end: times.dusk,
-      },
-      {
-        id: "nautical-dusk",
-        name: "навигационные сумерки",
-        start: times.dusk,
-        end: times.nauticalDusk,
-      },
-      {
-        id: "astronomical-twilight-eveing",
-        name: "астрономические сумерки",
-        start: times.nauticalDusk,
-        end: times.night,
-      },
-      {
-        id: "night",
-        name: "ночь",
-        start: times.night,
-        end: times.nightEnd,
-      },
-    ]
+  return sections.map(s=> ({
+    id: s.id,
+    start: times[s.start],
+    end: times[s.end],
+  }) );
 }
