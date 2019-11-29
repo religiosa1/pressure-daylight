@@ -1,6 +1,8 @@
 <script>
   import { createEventDispatcher } from 'svelte';
+  import moment from "moment";
 
+  import isWinter from "../functions/is-winter";
   import range from "../functions/range";
   import timeToDeg from "../functions/time-to-deg";
   import { timeRingSections } from "../functions/timeRingSections";
@@ -8,6 +10,7 @@
 	const dispatch = createEventDispatcher();
 
   export let times;
+  export let latitude = 0; // for the extremes
 
   const size = 306;
   const padding = 3;
@@ -106,12 +109,32 @@
     });
   }
 
-  $: ringSections = colorizeSections(timeRingSections(times));
+  $: trsections = timeRingSections(times);
+  let ringSections;
+  $: if (trsections && trsections.length > 0) {
+    ringSections = colorizeSections(trsections);
+  } else {
+    let cm = moment(times.nadir);
+    let s = {
+      id: isWinter(times.nadir, latitude)? "night" : "day",
+      start: moment(cm).startOf('day').toDate(),
+      end: moment(cm).endOf('day').toDate(),
+    };
+    ringSections = colorizeSections([s]);
+  }
 
   function calculatePath(section) {
     let startDeg = timeToDeg(section.start);
     let endDeg = timeToDeg(section.end);
-    let largeArcFlag = (endDeg - startDeg >= 180) ? '1' : '0';
+
+
+    let largeArcFlag;
+    let diff = endDeg - startDeg;
+    if (diff >= 180 || (diff < 0 && diff > -180)) {
+      largeArcFlag = '1';
+    } else {
+      largeArcFlag = '0';
+    }
 
     let start_x = size/2 + Math.cos(startDeg * Math.PI / 180 - Math.PI/2) * radius;
     let start_y = size/2 + Math.sin(startDeg * Math.PI / 180 - Math.PI/2) * radius;

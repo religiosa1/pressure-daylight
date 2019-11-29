@@ -15,6 +15,7 @@
   import timeToDeg from "../functions/time-to-deg";
 
   export let times;
+  export let latitude;
 
   let time = new Date();
 
@@ -58,7 +59,7 @@
     <div class="dial" transition:slide="{{ duration: 300, easing: quintOut }}">
       <div class="top-marker" class:top-marker-visible={offseted}></div>
       <div class="clock-wrapper" on:click={toggleOffset} style={offset}>
-        <Dial {times} on:sectionHover={updateSection} />
+        <Dial {times} {latitude} on:sectionHover={updateSection} />
       </div>
       <SectionInfo {section} />
     </div>

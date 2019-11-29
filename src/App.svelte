@@ -32,4 +32,4 @@
   });
 </script>
 
-<Clock {times} />
+<Clock {times} latitude={$latitude} />

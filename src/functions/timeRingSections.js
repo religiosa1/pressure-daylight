@@ -1,3 +1,5 @@
+import circular from "../functions/circular";
+
 const sections = [
   {
     id: "astronomical-twilight-morning",
@@ -62,10 +64,32 @@ const sections = [
 ];
 
 export function timeRingSections(times) {
-  // TODO Проверка что заполнено, а что нет.
-  return sections.map(s=> ({
-    id: s.id,
-    start: times[s.start],
-    end: times[s.end],
-  }) );
+  let retval = [];
+  for (let i = 0; i < sections.length; i++) {
+    let s = sections[i];
+
+    if (!s || !(times[s.start] instanceof Date) || isNaN(times[s.start].getTime())) {
+      continue;
+    }
+
+    let r = {
+      id: s.id,
+      start: times[s.start],
+    }
+
+    if ((times[s.end] instanceof Date) && !isNaN(times[s.end].getTime())) {
+      r.end = times[s.end];
+    } else {
+      for (let nr of circular(sections, i, { omitFirst: true })) {
+        if (nr && times[nr.end] instanceof Date && !isNaN(times[nr.end].getTime())) {
+          r.end = times[nr.end];
+          r.overspanned = true;
+          break;
+        }
+      }
+    }
+    if (!r.end) continue;
+    retval.push(r);
+  }
+  return retval;
 }
