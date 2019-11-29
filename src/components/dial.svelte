@@ -2,7 +2,6 @@
   import { createEventDispatcher } from 'svelte';
   import moment from "moment";
 
-  import isWinter from "../functions/is-winter";
   import range from "../functions/range";
   import timeToDeg from "../functions/time-to-deg";
   import { timeRingSections } from "../functions/timeRingSections";
@@ -10,7 +9,6 @@
 	const dispatch = createEventDispatcher();
 
   export let times;
-  export let latitude = 0; // for the extremes
 
   const size = 306;
   const padding = 3;
@@ -116,7 +114,7 @@
   } else {
     let cm = moment(times.nadir);
     let s = {
-      id: isWinter(times.nadir, latitude)? "night" : "day",
+      id: times.isWinter? "night" : "day",
       start: moment(cm).startOf('day').toDate(),
       end: moment(cm).endOf('day').toDate(),
     };

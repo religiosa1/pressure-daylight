@@ -3,12 +3,12 @@
 
   import { latitude, longitude } from "./components/clock.store";
 
-  import SunCalc from "suncalc";
+  import getTimes from "./functions/get-times";
   import Clock from "./components/clock.svelte";
 
   let day = new Date();
 
-  $: times = SunCalc.getTimes(day, $latitude, $longitude);
+  $: times = getTimes(day, $latitude, $longitude) ;
 
   onMount(() => {
     let day_to;
@@ -32,4 +32,4 @@
   });
 </script>
 
-<Clock {times} latitude={$latitude} />
+<Clock {times} />
