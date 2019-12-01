@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { writable, readable } from 'svelte/store';
 
 export const tableView = writable(false);
 export const state = writable(false);
@@ -33,3 +33,25 @@ export function restoretLocation() {
 
 export const latitude = writable(default_latitude);
 export const longitude = writable(default_longitude);
+
+
+export const dateType = writable("auto");
+export const date = readable(new Date(), set=>{
+  let day_to;
+  let setDayTO = () => {
+    let now = new Date();
+    let tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+    tomorrow.setHours(0);
+    tomorrow.setMinutes(0);
+    tomorrow.setSeconds(0);
+    tomorrow.setMilliseconds(0);
+    setTimeout(() => {
+       set(new Date());
+       setDayTO();
+    }, tomorrow.getTime() - now.getTime() );
+  };
+
+  day_to = setDayTO();
+
+  return () => clearTimeout(day_to);
+});

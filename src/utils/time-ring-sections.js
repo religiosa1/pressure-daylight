@@ -1,4 +1,4 @@
-import circular from "../functions/circular";
+import circular from "./circular";
 
 const sections = [
   {

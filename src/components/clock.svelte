@@ -12,7 +12,7 @@
   import DateForm from "./date-form.svelte"
   import PlaceForm from "./place-form.svelte"
 
-  import timeToDeg from "../functions/time-to-deg";
+  import timeToDeg from "../utils/time-to-deg";
 
   export let times;
 
@@ -57,8 +57,13 @@
     {#if !$tableView}
     <div class="dial" transition:slide="{{ duration: 300, easing: quintOut }}">
       <div class="top-marker" class:top-marker-visible={offseted}></div>
-      <div class="clock-wrapper" on:click={toggleOffset} style={offset}>
-        <Dial {times} on:sectionHover={updateSection} />
+      <div class="clock-wrapper" on:click={toggleOffset} >
+        <div class="clock-rotater" style={offset}>
+          <Dial {times} on:sectionHover={updateSection} />
+        </div>
+        <div class="dial-overlay" on:click|stopPropagation>
+          <slot></slot>
+        </div>
       </div>
       <SectionInfo {section} />
     </div>
@@ -84,14 +89,32 @@
 
 <style>
 .clock {
-  position: relative;
+  height: 100vh;
 }
-  .clock-wrapper {
+  .clock-wrapper,
+  .clock-rotater {
     border-radius: 50%;
     width: 85vmin;
     height: 85vmin;
+  }
+  .clock-wrapper {
+    position: relative;
     margin: auto;
-    transition: transform 0.4s ease;
+    overflow: hidden;
+  }
+  .clock-rotater { transition: transform 0.4s ease; }
+  .dial-overlay {
+    position: absolute;
+    top: 20%;
+    bottom: 20%;
+    left:20%;
+    right: 20%;
+    margin: auto;
+    display:flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
   }
   .top-marker {
     width: 0.8vmin;

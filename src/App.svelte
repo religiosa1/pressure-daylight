@@ -1,35 +1,10 @@
 <script>
-  import { onMount } from 'svelte';
+  import { latitude, longitude, date } from "./components/clock.store";
 
-  import { latitude, longitude } from "./components/clock.store";
-
-  import getTimes from "./functions/get-times";
+  import getTimes from "./utils/get-times";
   import Clock from "./components/clock.svelte";
 
-  let day = new Date();
-
-  $: times = getTimes(day, $latitude, $longitude) ;
-
-  onMount(() => {
-    let day_to;
-    let setDayTO = () => {
-      let now = new Date();
-      let tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-      tomorrow.setHours(0);
-      tomorrow.setMinutes(0);
-      tomorrow.setSeconds(0);
-      tomorrow.setMilliseconds(0);
-      setTimeout(() => {
-         day = new Date();
-         setDayTO();
-      }, tomorrow.getTime() - now.getTime())
-    };
-    day_to = setDayTO();
-
-    return () => {
-      clearTimeout(day_to);
-    };
-  });
+  $: times = getTimes($date, $latitude, $longitude);
 </script>
 
 <Clock {times} />
