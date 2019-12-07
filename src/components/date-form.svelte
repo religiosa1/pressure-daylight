@@ -1,11 +1,20 @@
 <script>
 import moment from "moment";
 
-import {dateType, date} from "./clock.store";
-
-$: doy = moment($date).dayOfYear();
+import {dateType, date, manualDow, state, ClockState} from "./clock.store";
 
 $: dateFormatted = moment($date).format("YYYY/M/DD");
+let localDow;
+
+$: if ($dateType === "auto") {
+  localDow = moment($date).dayOfYear();
+} else {
+  $manualDow = localDow;
+}
+
+function close() {
+  $state = ClockState.default;
+}
 
 </script>
 
@@ -32,10 +41,13 @@ $: dateFormatted = moment($date).format("YYYY/M/DD");
     <p>
       <input
         type="range"
-        bind:value={doy}
+        bind:value={localDow}
         disabled={$dateType !== "manual"}
         min="1" max="365"
       />
     </p>
   </div>
+  <button type="button" on:click={close} class="btn close">
+    Закрыть
+  </button>
 </div>

@@ -1,4 +1,5 @@
-import { writable, readable } from 'svelte/store';
+import { writable, readable, derived, get } from 'svelte/store';
+import moment from "moment";
 
 export const tableView = writable(false);
 export const state = writable(false);
@@ -13,19 +14,48 @@ export const ClockState = Object.freeze({
 export const default_latitude = 55.7522200;
 export const default_longitude = 37.6155600;
 
+export function isValidLatitude(val) {
+  return Number.isFinite(val) && val <= 90 && val >= -90;
+}
+
+export function isValidLongitude(val) {
+  return Number.isFinite(val) && val <= 180 && val >= -180;
+}
+
+const LOCATION_KEY = "saved_location"
 export function saveLocation() {
-  // TODO
+  if (!localStorage || typeof localStorage.setItem !== "function") {
+    return;
+  }
+  let lat = get(latitude);
+  let long = get(longitude);
+  localStorage.setItem(LOCATION_KEY, JSON.stringify({
+    latitude: lat,
+    longitude: long
+  }));
 }
 
 export function loadLocation() {
-  // TODO
+  let latitude, longitude
+  try {
+    if (localStorage && typeof localStorage.setItem === "function") {
+      let loaded = JSON.parse(localStorage.setItem(LOCATION_KEY));
+      if (loaded) {
+        latitude = loaded.latitude;
+        longitude = loaded.longitude;
+      }
+    }
+  } catch (e) {
+    console.warn('Error, during loading stored location, using default values', e);
+  }
+
   return {
-    latitude: default_latitude,
-    longitude: default_longitude,
+    latitude: isValidLatitude(latitude)? latitude : default_latitude,
+    longitude: isValidLongitude(longitude)? longitude : default_longitude
   };
 }
 
-export function restoretLocation() {
+export function restoreLocation() {
   let pos = loadLocation();
   latitude.update(()=>pos.latitude);
   longitude.update(()=>pos.longitude);
@@ -34,9 +64,11 @@ export function restoretLocation() {
 export const latitude = writable(default_latitude);
 export const longitude = writable(default_longitude);
 
+//-----------------------------------------------------------------------------
 
 export const dateType = writable("auto");
-export const date = readable(new Date(), set=>{
+export const manualDow = writable(moment().dayOfYear());
+export const today = readable(new Date(), set=>{
   let day_to;
   let setDayTO = () => {
     let now = new Date();
@@ -55,3 +87,14 @@ export const date = readable(new Date(), set=>{
 
   return () => clearTimeout(day_to);
 });
+
+export const date = derived(
+  [ dateType, manualDow, today ],
+  ([ $dateType, $manualDow, $today] )=> {
+    if ($dateType === "manual") {
+      return moment($today).dayOfYear($manualDow);
+    } else {
+      return $today;
+    }
+  }
+);

@@ -42,6 +42,7 @@
 <aside class="menu">
   <button
     type="button"
+    title={menuShown? 'Закрыть меню' : 'Открыть меню'}
     class="menu_button menu-toggler"
     class:active={menuShown}
     on:click={toggle}
