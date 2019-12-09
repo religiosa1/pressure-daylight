@@ -2,9 +2,9 @@
   import { createEventDispatcher } from 'svelte';
   import moment from "moment";
 
-  import range from "../utils/range";
-  import timeToDeg from "../utils/time-to-deg";
-  import { timeRingSections } from "../utils/time-ring-sections";
+  import range from "@/utils/range.js";
+  import timeToDeg from "@/utils/time-to-deg.js";
+  import { timeRingSections } from "@/utils/time-ring-sections.js";
 
 	const dispatch = createEventDispatcher();
 

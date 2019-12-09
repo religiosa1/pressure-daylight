@@ -3,7 +3,7 @@
   import { slide } from 'svelte/transition';
   import { quintOut } from 'svelte/easing';
 
-  import {tableView, state, ClockState } from "./clock.store";
+  import {latitude, longitude, date, tableView, state, ClockState } from "./clock.store";
 
   import Dial from "./dial.svelte";
   import SectionInfo from "./section-info.svelte";
@@ -12,9 +12,10 @@
   import DateForm from "./date-form.svelte"
   import PlaceForm from "./place-form.svelte"
 
-  import timeToDeg from "../utils/time-to-deg";
+  import timeToDeg from "@/utils/time-to-deg.js";
+  import getTimes from "@/utils/get-times.js";
 
-  export let times;
+  $: times = getTimes($date, $latitude, $longitude);
 
   let time = new Date();
 
@@ -115,6 +116,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+    font-size: 3vmin;
   }
   .top-marker {
     width: 0.8vmin;

@@ -1,10 +1,11 @@
 <script>
-  import { latitude, longitude, date } from "./components/clock.store";
-
-  import getTimes from "./utils/get-times";
-  import Clock from "./components/clock.svelte";
-
-  $: times = getTimes($date, $latitude, $longitude);
+  import Clock from "./components/clock/clock.svelte";
+  import PressureCurrent from "./components/pressure/pressure-current.svelte";
+  import PressureChart from "./components/pressure/pressure-chart.svelte";
 </script>
 
-<Clock {times} />
+<Clock>
+  <PressureCurrent />
+</Clock>
+
+<PressureChart />

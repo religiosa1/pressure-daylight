@@ -1,4 +1,6 @@
 /* eslint-env node */
+import { join } from "path";
+import alias from '@rollup/plugin-alias';
 import svelte from 'rollup-plugin-svelte';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
@@ -18,6 +20,11 @@ export default {
     file: 'public/bundle.js'
   },
   plugins: [
+    alias({
+      entries: {
+        "@": join(__dirname, 'src'),
+      }
+    }),
     svelte({
       dev: !production,
       emitCss: true
