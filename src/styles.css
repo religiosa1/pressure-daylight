@@ -41,6 +41,7 @@
   font-weight: 600;
 	font-style: normal;
 }
+
 html, body {
   margin: 0;
   padding: 0;
@@ -53,3 +54,35 @@ html, body {
 * {
   box-sizing: border-box;
 }
+
+
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+.table {
+  border-collapse: collapse;
+}
+.table th, .table td {
+  padding: 7px 5px;
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid #aaa;
+  background: white;
+}
+.table th {
+  font-weight: 600;
+}
+.table tr:nth-child(even) th,
+.table tr:nth-child(even) td {
+  background: #EFEFEF;
+}
+.table th:first-child,
+.table td:first-child {
+  text-align: right;
+}
+.table td { min-width: 5em; }

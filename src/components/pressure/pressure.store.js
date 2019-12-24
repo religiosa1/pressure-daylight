@@ -2,6 +2,7 @@ import { writable, derived } from 'svelte/store';
 import moment from "moment";
 
 export const startDate = writable(moment().subtract(3, "days").toDate());
+
 export const pressureEntries = derived(startDate, $startDate => {
   let params;
   if ($startDate instanceof Date) {

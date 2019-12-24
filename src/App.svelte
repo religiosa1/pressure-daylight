@@ -1,11 +1,13 @@
 <script>
   import Clock from "./components/clock/clock.svelte";
   import PressureCurrent from "./components/pressure/pressure-current.svelte";
-  import PressureChart from "./components/pressure/pressure-chart.svelte";
+  import PressureBlock from "./components/pressure/pressure-block.svelte";
 </script>
 
 <Clock>
   <PressureCurrent />
 </Clock>
 
-<PressureChart />
+<PressureBlock />
+
+<style global src="./styles.css"></style>

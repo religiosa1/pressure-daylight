@@ -2,11 +2,11 @@
 import { join } from "path";
 import alias from '@rollup/plugin-alias';
 import svelte from 'rollup-plugin-svelte';
+import preprocess from 'svelte-preprocess'
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
-import postcss from 'rollup-plugin-postcss';
 import autoprefixer from 'autoprefixer';
 
 const production = !process.env.ROLLUP_WATCH;
@@ -27,12 +27,19 @@ export default {
     }),
     svelte({
       dev: !production,
-      emitCss: true
+      preprocess: preprocess({
+        postcss: {
+          extract: true,
+          plugins: [
+            autoprefixer(),
+          ],
+        },
+      }),
+      css: css => {
+        css.write('public/bundle.css')
+      },
     }),
-    postcss({
-      extract: true,
-      plugins: [autoprefixer()]
-    }),
+
 
     resolve({
       browser: true,
