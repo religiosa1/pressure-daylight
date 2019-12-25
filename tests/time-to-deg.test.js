@@ -1,4 +1,4 @@
-const timeToDeg = require("../src/functions/time-to-deg");
+const timeToDeg = require("../src/utils/time-to-deg");
 
 test("Valid values", () => {
   expect( timeToDeg(new Date('1995-12-17T00:00:00')) ).toBe(0);

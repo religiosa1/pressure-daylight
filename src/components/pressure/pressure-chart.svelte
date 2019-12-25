@@ -23,7 +23,7 @@ const yEdgeBottom = height - yOffsetBottom;
 const xEdgeRight = xOffsetLeft + activeWidth;
 
 const yScaleMarkers = Array.from(
-  range(yScaleMin, yScaleMax + 5, 5),
+  range(yScaleMin, yScaleMax, 5, true),
   y => ({
     value: y,
     coord: yPos(y),

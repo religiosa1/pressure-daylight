@@ -1,4 +1,4 @@
-const range = require("../src/functions/range");
+const range = require("../src/utils/range");
 
 test("Invalid values", () => {
   expect( () => range("asdfasdf").next() ).toThrow(TypeError);
@@ -16,4 +16,12 @@ test("Start value", () => {
 });
 test("Step", () => {
   expect( Array.from(range(1, 11, 3)) ).toEqual([1, 4, 7, 10]);
+});
+test("Inclusive", () => {
+  expect( Array.from(range(1, 10, 3, true)) ).toEqual([1, 4, 7, 10]);
+  expect( Array.from(range(1, 1, 1, true)) ).toEqual([1]);
+});
+test("Concat", () => {
+  let concatenatedRange = range(3).concat(range(4,6), [8, 9], 12);
+  expect( Array.from( concatenatedRange ) ).toEqual([0, 1, 2, 4, 5, 8, 9, 12]);
 });

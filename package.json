@@ -33,6 +33,7 @@
     "svelte-preprocess": "^3.3.0"
   },
   "dependencies": {
+    "moment": "^2.24.0",
     "suncalc": "^1.8.0"
   }
 }

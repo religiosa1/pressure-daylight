@@ -1,4 +1,4 @@
-const circular = require("../src/functions/circular");
+const circular = require("../src/utils/circular");
 
 test("Simple usage", () => {
   const initial = [1, 2, 3, 4, 5];

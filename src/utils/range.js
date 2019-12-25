@@ -1,4 +1,4 @@
-module.exports =  function*(start, end, step = 1) {
+let range = function*(start, end, step = 1, inclusive = false) {
   if (!Number.isInteger(start)) throw new TypeError("Expect to recieve an integer as the first arg of range");
   if (typeof end === "undefined" || end === null) {
     end = start;
@@ -9,9 +9,26 @@ module.exports =  function*(start, end, step = 1) {
   if (!Number.isInteger(step) || step <= 0) {
     throw new Error("Negative or zero step isn't supported in ranges");
   }
-  const len = Math.ceil((end - start) / step);
-  if (len <= 0) return [];
-  for (let i = start; i < end; i += step) {
-    yield i;
+  if (inclusive) {
+    for (let i = start; i <= end; i += step) {
+      yield i;
+    }
+  } else {
+    for (let i = start; i < end; i += step) {
+      yield i;
+    }
   }
 };
+
+range.prototype.concat = function*() {
+  for (let i of this) { yield i; }
+  for (let arg of arguments) {
+    if (arg && typeof arg[Symbol.iterator] === 'function') {
+      for (let i of arg) { yield i; }
+    } else {
+      yield arg;
+    }
+  }
+};
+
+module.exports = range;
