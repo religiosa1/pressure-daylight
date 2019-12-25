@@ -19,6 +19,8 @@ const xOffsetLeft = 30;
 const xOffsetRight = 10;
 const activeWidth = width - xOffsetLeft - xOffsetRight;
 const activeHeight = height - yOffsetTop - yOffsetBottom;
+const yEdgeBottom = height - yOffsetBottom;
+const xEdgeRight = xOffsetLeft + activeWidth;
 
 const yScaleMarkers = Array.from(
   range(yScaleMin, yScaleMax + 5, 5),
@@ -32,7 +34,6 @@ const yScaleMarkers = Array.from(
 $: startDateVal = (startDate instanceof Date) ? startDate.getTime() : NaN;
 $: nowOffsetedVal = getNowOffseted(startDateVal);
 $: points = calculatePath(entries);
-
 
 $: xScalePrimaryMarkers = new Set(range(
   moment(startDate).startOf(dateRange.markerSnap).toDate().getTime() + dateRange.markerResolution,
@@ -80,17 +81,62 @@ function yPos(press) {
 function xPos(time) {
   return (time - startDateVal) / nowOffsetedVal * activeWidth + xOffsetLeft;
 }
+
+let chart;
+let cursorX = NaN;
+let cursorY = NaN;
+$: isCursorOverField = (
+  cursorX && cursorX > xOffsetLeft && cursorX < xEdgeRight &&
+  cursorY && cursorY > yOffsetTop && cursorY < yEdgeBottom
+);
+$: cursorPressure = posToPres(cursorY - yOffsetTop);
+$: cursorTime = posToTime(cursorX - xOffsetLeft);
+
+function posToTime(x) {
+  return x / activeWidth * nowOffsetedVal + startDateVal;
+}
+function posToPres(y) {
+  return -y / activeHeight * yScaleRange + yScaleMax;
+}
+
+function onMouseOver(e) {
+  if (!chart || typeof chart.getBoundingClientRect !== "function"|| !e) { return; }
+  let cbr = chart.getBoundingClientRect();
+  let x = e.clientX - cbr.left;
+  cursorX = (e.clientX - cbr.left) / cbr.width * width;
+  cursorY = (e.clientY - cbr.top) / cbr.height * height;
+  let time = posToTime(x, cbr);
+  console.log(time);
+}
+function onMouseLeave() {
+  cursorX = NaN;
+  cursorY = NaN;
+}
+
+function formatTime(time) {
+  return moment(time).format("YYYY.MM.DD HH:mm");
+}
+
+function formatPres(pres) {
+  return pres.toFixed(2) + " мм.рт.ст.";
+}
 </script>
 
-<svg class="chart" viewbox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg">
-  <rect class="chart-field" x={xOffsetLeft} y={yOffsetTop} width={activeWidth} height={activeHeight} />
+<svg
+  class="chart"
+  viewbox="0 0 {width} {height}"
+  xmlns="http://www.w3.org/2000/svg"
+  bind:this={chart}
+  on:mousemove={onMouseOver}
+  on:mouseleave={onMouseLeave}
+>
   {#each yScaleMarkers as yMarker}
   <g class="marker-group marker-group-x">
     <line
       class='marker-line marker-line-y'
       class:marker-line-secondary={yMarker.secondary}
       x1={xOffsetLeft}
-      x2={xOffsetLeft + activeWidth}
+      x2={xEdgeRight}
       y1={yMarker.coord}
       y2={yMarker.coord}
     />
@@ -112,7 +158,7 @@ function xPos(time) {
       x1={xMarker.coord}
       x2={xMarker.coord}
       y1={yOffsetTop}
-      y2={height - yOffsetBottom}
+      y2={yEdgeBottom}
     />
     <text
       x={xMarker.coord}
@@ -125,10 +171,33 @@ function xPos(time) {
   </g>
   {/each}
 
-  <polyline class="chart-line"
-    {points}
-    fill="none" stroke="black"
-  />
+  <g class="chart-field-group">
+    <rect class="chart-field" x={xOffsetLeft} y={yOffsetTop} width={activeWidth} height={activeHeight} />
+    {#if isCursorOverField}
+    <line class="marker-line marker-line-cursor marker-line-cursor-x"
+      x1={cursorX}
+      x2={cursorX}
+      y1={yOffsetTop}
+      y2={yEdgeBottom}
+    />
+    <line class="marker-line marker-line-cursor marker-line-cursor-y"
+      x1={xOffsetLeft}
+      x2={xEdgeRight}
+      y1={cursorY}
+      y2={cursorY}
+    />
+    <text
+      x={xEdgeRight - 5}
+      y={yEdgeBottom - 5}
+      class="marker-label marker-label-cursor"
+    >{formatTime(cursorTime)} : {formatPres(cursorPressure)} </text>
+    {/if}
+
+    <polyline class="chart-line"
+      {points}
+      fill="none" stroke="black"
+    />
+  </g>
 </svg>
 
 <style>
@@ -138,10 +207,15 @@ function xPos(time) {
   margin: 0 -1.25% 0 -3.75%;
 }
 
+.chart-field-group {
+  cursor: crosshair;
+}
+
 .chart-field {
   stroke: #333;
-  fill:none;
+  fill:transparent;
   stroke-width: 0.5px;
+
 }
 
 .marker-line {
@@ -153,6 +227,10 @@ function xPos(time) {
   stroke: #888;
   stroke-dasharray: 1px, 2px;
 }
+.marker-line-cursor {
+  stroke: #F44;
+}
+
 .marker-label {
   font-size: 12px;
   text-anchor: middle;
@@ -164,6 +242,15 @@ function xPos(time) {
 }
 .marker-label-x {
   writing-mode: sideways-lr;
+}
+.marker-label-cursor {
+  stroke: #F44;
+  fill: #F44;
+  text-anchor: end;
+  alignment-baseline: baseline;
+  dominant-baseline: baseline;
+  font-weight: 300;
+  font-size: 8px;
 }
 
 .marker-group:hover .marker-line {
