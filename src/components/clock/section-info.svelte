@@ -11,13 +11,18 @@
 </script>
 <style>
 .section-info {
+  padding: 1px 0;
+  line-height: 1.2;
   text-align: center;
+  height: 2.5em;
+  margin: 1em 0;
+  font-size: 2.5vmin;
 }
 .section-name {
-  margin-bottom: 0.2em;
+  margin: 0 0 0.2em;
 }
 .section-time {
-  margin-top: 0;
+  margin: 0;
   font-size: 0.85em;
 }
 </style>
