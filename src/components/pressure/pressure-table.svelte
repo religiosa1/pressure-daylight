@@ -17,11 +17,6 @@ function formatPres(pres, precision) {
 </script>
 
 <div class="table-container">
-  <label>
-    <input type="number" bind:value={precision} min="0" max="10" step="1" />
-    Точность
-  </label>
-
   <div class="table-responsive table-sticky">
     <table class="table">
       <thead>
@@ -42,6 +37,12 @@ function formatPres(pres, precision) {
       </tbody>
     </table>
   </div>
+  <p>
+    <label>
+      <input type="number" bind:value={precision} min="0" max="10" step="1" />
+      Точность
+    </label>
+  </p>
 </div>
 
 <style>
@@ -51,6 +52,25 @@ function formatPres(pres, precision) {
 }
 
 .table-sticky {
-  /* TODO */
+  position: relative;
+  max-height: 74vh;
+  overflow-y: auto;
+  border-top: 1px solid var(--table-border-color);
+  border-bottom: 1px solid var(--table-border-color);
+  scrollbar-width: thin;
+}
+.table-sticky .table {
+  width: 100%;
+}
+.table-sticky thead {
+  border-bottom: 1px solid var(--table-border-color);
+}
+
+.table-sticky thead th,
+.table-sticky thead td {
+  position: sticky;
+  top:0;
+  background-clip: padding-box;
+  border-top:0;
 }
 </style>

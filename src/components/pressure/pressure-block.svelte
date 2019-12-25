@@ -1,7 +1,7 @@
 <script>
 import moment from "moment";
 
-import { pressureEntries, startDate } from "./pressure.store.js";
+import { pressureEntries, startDate, endDate } from "./pressure.store.js";
 import { TimeRanges } from "./time-ranges";
 
 import PressureChart from "./pressure-chart.svelte";
@@ -12,11 +12,9 @@ $: filteredEntries = validateEntries($pressureEntries);
 let dateRange = TimeRanges[0];
 let displayType = "chart";
 
-let endDate = new Date();
 refresh();
 
 function refresh() {
-  endDate = new Date();
   $startDate = moment().subtract(dateRange.value, "days").toDate()
 }
 
@@ -28,7 +26,7 @@ function validateEntries(etr) {
           !p ||
           !Number.isFinite(p.pressure) ||
           !moment(p.time).isAfter($startDate) ||
-          !moment(p.time).isBefore(endDate)
+          !moment(p.time).isBefore($endDate)
         ) return false;
         return true;
       });
@@ -59,14 +57,21 @@ function validateEntries(etr) {
         Таблица
       </label>
     </div>
-    <button type="button" on:click={refresh}>Обновить</button>
+    <div class="refresh-ctrl">
+      {#if $endDate}
+        <span class="data-timestamp">
+          Данные от { moment($endDate).format("HH:mm:ss") }
+        </span>
+      {/if}
+      <button type="button" on:click={refresh}>Обновить</button>
+    </div>
   </div>
   <div class="pressure-data">
   {#await filteredEntries}
    <p>...загрузка</p>
   {:then entries}
     {#if displayType === "chart"}
-    <PressureChart {entries} startDate={$startDate} endDate={endDate} {dateRange} />
+    <PressureChart {entries} startDate={$startDate} endDate={$endDate} {dateRange} />
     {:else}
     <PressureTable {entries} />
     {/if}
@@ -89,5 +94,9 @@ function validateEntries(etr) {
     flex-flow: row nowrap;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 1em;
+  }
+  .data-timestamp {
+    font-size: smaller;
   }
 </style>
