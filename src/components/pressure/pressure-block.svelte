@@ -39,7 +39,7 @@ function validateEntries(etr) {
 <div class="pressure-chart-wrapper">
   <h2>Атмосферное давление</h2>
   <div class="chart-controls">
-    <div class="ranges">
+    <div class="ctrl-grp ranges">
       {#each TimeRanges as range}
       <label>
         <input type="radio" bind:group={dateRange} value={range} on:change={refresh} />
@@ -47,7 +47,7 @@ function validateEntries(etr) {
       </label>
       {/each}
     </div>
-    <div class="display-type">
+    <div class="ctrl-grp display-type">
       <label>
         <input type="radio" bind:group={displayType} value="chart" />
         График
@@ -57,7 +57,7 @@ function validateEntries(etr) {
         Таблица
       </label>
     </div>
-    <div class="refresh-ctrl">
+    <div class="ctrl-grp refresh-ctrl">
       {#if $endDate}
         <span class="data-timestamp">
           Данные от { moment($endDate).format("HH:mm:ss") }
@@ -82,9 +82,14 @@ function validateEntries(etr) {
 </div>
 
 <style>
+  label {
+    display: inline-block;
+    vertical-align: middle;
+  }
   .pressure-chart-wrapper {
     max-width: 1200px;
     margin: 0 auto;
+    padding: 0 6%;
   }
   .pressure-data {
     min-height: 600px;
@@ -94,7 +99,16 @@ function validateEntries(etr) {
     flex-flow: row nowrap;
     align-items: center;
     justify-content: space-between;
+  }
+  .ctrl-grp {
     margin-bottom: 1em;
+  }
+  @media (max-width: 900px) {
+    .chart-controls {
+      flex-flow: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
   }
   .data-timestamp {
     font-size: smaller;

@@ -92,6 +92,12 @@
     box-shadow: 0 0 20px #ccc inset;
     transition: background-color 0.4s ease-in-out;
   }
+    @media (max-width: 600px) {
+      .menu_button {
+        width: 35px;
+        height: 35px;
+      }
+    }
     .menu_button:active { transform: translate(1px, 1px); }
     .menu_button.active { background-color: #999; }
 

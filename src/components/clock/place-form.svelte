@@ -25,10 +25,6 @@
 </script>
 
 <div class="place-form">
-  <p class="current-coordinates">
-    {$latitude} : {$longitude}
-  </p>
-
   {#if hasGeolocationApi}
   <button type="button" on:click={retrieveLocation}>
     Текущие координаты
@@ -49,6 +45,11 @@
   {/if}
 
   <div class="place-selector">
+    <p class="current-coordinates">
+      <input type="number" min="-90" max="90" bind:value={$latitude} step="any" />
+      :
+      <input type="number" min="-180" max="180" bind:value={$longitude} step="any" />
+    </p>
     <p>
       <label>
         Широта
@@ -61,9 +62,6 @@
         <input bind:value={$longitude} type="range" max="180" min="-180" />
       </label>
     </p>
-    <!-- <div class="map-wrap">
-      Здесь карта
-    </div> -->
     <button type="button" on:click={saveLocation}>
       Сохранить координаты
     </button>

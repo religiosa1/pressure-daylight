@@ -1,15 +1,15 @@
 import { writable, readable, derived, get } from 'svelte/store';
 import moment from "moment";
 
-export const tableView = writable(false);
-export const state = writable(false);
-
 export const ClockState = Object.freeze({
   "default": 0,
   "placeform": 1,
   "dateform": 2,
 });
 
+
+export const tableView = writable(false);
+export const state = writable(ClockState.default);
 
 export const default_latitude = 55.7522200;
 export const default_longitude = 37.6155600;

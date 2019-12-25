@@ -51,10 +51,8 @@
   }
 </script>
 
-<div class="clock">
-  <Menu />
-
-  <div class="side-form">
+<div class="clock" class:side-pain-shown={$state !== ClockState.default}>
+  <div class="clock-pane">
     {#if !$tableView}
     <div class="dial" transition:slide="{{ duration: 300, easing: quintOut }}">
       <div class="top-marker" class:top-marker-visible={offseted}></div>
@@ -86,17 +84,24 @@
     <DateForm />
   </div>
   {/if}
+
+  <Menu />
 </div>
 
 <style>
 .clock {
+  width: 100%;
   height: 100vh;
+  font-size: 0;
+  line-height: 100vh;
+  text-align: center;
+  padding: 1px;
 }
   .clock-wrapper,
   .clock-rotater {
     border-radius: 50%;
-    width: 85vmin;
-    height: 85vmin;
+    max-width: 85vmin;
+    max-height: 85vmin;
   }
   .clock-wrapper {
     position: relative;
@@ -118,6 +123,9 @@
     text-align: center;
     font-size: 3vmin;
   }
+  @media (max-aspect-ratio: 2/1) {
+    .side-pain-shown .dial-overlay { font-size: 1.5vw }
+  }
   .top-marker {
     width: 0.8vmin;
     height: 0.8vmin;
@@ -136,16 +144,18 @@
     padding: 20px;
   }
 
-  .clock {
-    font-size: 0;
-    text-align: center;
-  }
+  .clock-pane,
   .side-form {
     text-align: left;
     display: inline-block;
-    vertical-align: top;
+    vertical-align: middle;
     margin:auto;
     width:50%;
     font-size: 1rem;
+    line-height: 1.2;
   }
+  .clock-pane {
+    width: 100%;
+  }
+  .side-pain-shown .clock-pane { width: 50%; }
 </style>
