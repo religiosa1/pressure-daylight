@@ -1,6 +1,9 @@
 import { writable, readable, derived, get } from 'svelte/store';
 import moment from "moment";
 
+import getTimes from "@/utils/get-times.js";
+
+
 export const ClockState = Object.freeze({
   "default": 0,
   "placeform": 1,
@@ -97,4 +100,9 @@ export const date = derived(
       return $today;
     }
   }
+);
+
+export const suncalc = derived(
+  [date, latitude, longitude],
+  ([ $date, $latitude, $longitude ]) => getTimes($date, $latitude, $longitude)
 );

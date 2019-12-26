@@ -2,13 +2,13 @@
   import { createEventDispatcher } from 'svelte';
   import moment from "moment";
 
+  import { suncalc } from "./clock.store";
+
   import range from "@/utils/range.js";
   import timeToDeg from "@/utils/time-to-deg.js";
   import { timeRingSections } from "@/utils/time-ring-sections.js";
 
-	const dispatch = createEventDispatcher();
-
-  export let times;
+  const dispatch = createEventDispatcher();
 
   const size = 306;
   const padding = 3;
@@ -25,14 +25,14 @@
   $: markers = [
     {
       name: "солнечный полдень",
-      time: times.solarNoon,
-      offset: timeToDeg(times.solarNoon),
+      time: $suncalc.solarNoon,
+      offset: timeToDeg($suncalc.solarNoon),
       class: "time-mark-noon",
     },
     {
       name: "надир",
-      time: times.nadir,
-      offset: timeToDeg(times.nadir),
+      time: $suncalc.nadir,
+      offset: timeToDeg($suncalc.nadir),
       class: "time-mark-nadir",
     },
   ];
@@ -100,7 +100,7 @@
     });
   }
 
-  $: trsections = timeRingSections(times).map(i => {
+  $: trsections = timeRingSections($suncalc).map(i => {
     i.startDeg = timeToDeg(i.start);
     i.endDeg = timeToDeg(i.end);
     return i;
@@ -109,9 +109,9 @@
   $: if (trsections && trsections.length > 0) {
     ringSections = colorizeSections(trsections);
   } else {
-    let cm = moment(times.nadir);
+    let cm = moment($suncalc.nadir);
     let s = {
-      id: times.isWinter? "night" : "day",
+      id: $suncalc.isWinter? "night" : "day",
       start: moment(cm).startOf('day').toDate(),
       end: moment(cm).endOf('day').toDate(),
     };
