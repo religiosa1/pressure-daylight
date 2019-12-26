@@ -106,7 +106,6 @@ function onMouseOver(e) {
   cursorX = (e.clientX - cbr.left) / cbr.width * width;
   cursorY = (e.clientY - cbr.top) / cbr.height * height;
   let time = posToTime(x, cbr);
-  console.log(time);
 }
 function onMouseLeave() {
   cursorX = NaN;
@@ -241,6 +240,8 @@ function formatPres(pres) {
   font-weight: 300;
 }
 .marker-label-x {
+  writing-mode: vertical-lr; /* chrome fallback  */
+  text-orientation: sideways;
   writing-mode: sideways-lr;
 }
 .marker-label-cursor {

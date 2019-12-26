@@ -11,7 +11,9 @@
 <div class="clock" class:side-pain-shown={$state !== ClockState.default}>
   <div class="clock-pane">
     {#if !$tableView}
-      <Clock />
+      <Clock>
+        <slot></slot>
+      </Clock>
     {:else}
       <TimesList />
     {/if}
@@ -41,7 +43,7 @@
   text-align: center;
   padding: 1px;
 }
-  
+
   .clock-pane,
   .side-form {
     text-align: left;
