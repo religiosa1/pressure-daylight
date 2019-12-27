@@ -1,6 +1,4 @@
-module.exports = function*(array, index, {
-  omitFirst = false
-} = {}) {
+module.exports = function*(array, index, { omitFirst = false } = {}) {
   if (array == null || !Number.isInteger(array.length)) {
     throw new TypeError("Expecting an array-like object as the first argument");
   }

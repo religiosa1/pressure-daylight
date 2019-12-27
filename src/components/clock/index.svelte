@@ -19,18 +19,19 @@
     {/if}
   </div>
 
-  {#if $state === ClockState.placeform}
+  {#if $state !== ClockState.default}
   <div class="side-form">
+    {#if $state === ClockState.placeform}
     <PlaceForm />
-  </div>
-  {/if}
-
-  {#if $state === ClockState.dateform}
-  <div class="side-form">
+    {/if}
+    {#if $state === ClockState.dateform}
     <DateForm />
+    {/if}
+    <button type="button" class="side-form-close" on:click={()=>$state = ClockState.default}>
+      Закрыть
+    </button>
   </div>
   {/if}
-
   <Menu />
 </div>
 

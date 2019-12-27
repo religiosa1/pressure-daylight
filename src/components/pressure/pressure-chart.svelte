@@ -40,6 +40,7 @@ $: xScalePrimaryMarkers = new Set(range(
   endDate.getTime(),
   dateRange.markerResolution
 ));
+
 $: xScaleMarkers = Array.from(
   range(
     moment(startDate).startOf(dateRange.markerSnap).toDate().getTime() + dateRange.markerSecondaryResolution,
@@ -78,6 +79,7 @@ function getNowOffseted(offset) {
 function yPos(press) {
   return (press - yScaleMin) / yScaleRange * -activeHeight + activeHeight + yOffsetTop;
 }
+
 function xPos(time) {
   return (time - startDateVal) / nowOffsetedVal * activeWidth + xOffsetLeft;
 }
@@ -95,18 +97,19 @@ $: cursorTime = posToTime(cursorX - xOffsetLeft);
 function posToTime(x) {
   return x / activeWidth * nowOffsetedVal + startDateVal;
 }
+
 function posToPres(y) {
   return -y / activeHeight * yScaleRange + yScaleMax;
 }
 
+
 function onMouseOver(e) {
   if (!chart || typeof chart.getBoundingClientRect !== "function"|| !e) { return; }
   let cbr = chart.getBoundingClientRect();
-  let x = e.clientX - cbr.left;
   cursorX = (e.clientX - cbr.left) / cbr.width * width;
   cursorY = (e.clientY - cbr.top) / cbr.height * height;
-  let time = posToTime(x, cbr);
 }
+
 function onMouseLeave() {
   cursorX = NaN;
   cursorY = NaN;
@@ -129,6 +132,7 @@ function formatPres(pres) {
   on:mousemove={onMouseOver}
   on:mouseleave={onMouseLeave}
 >
+  <title>График давления по времени</title>
   {#each yScaleMarkers as yMarker}
   <g class="marker-group marker-group-x">
     <line

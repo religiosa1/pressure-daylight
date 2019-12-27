@@ -158,6 +158,7 @@
 </script>
 
 <svg class="clock" viewbox="0 0 {size} {size}" xmlns="http://www.w3.org/2000/svg">
+  <title>Отображение времени заката, рассвета и различных состояний сумерек</title>
   <linearGradient id="grd-astro" x1="0" y1="1" x2="0" y2="0">
     <stop offset="0%" stop-color="#0000aa"></stop>
     <stop offset="100%" stop-color="#000044"></stop>

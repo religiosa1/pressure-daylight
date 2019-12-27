@@ -90,8 +90,12 @@
     padding: 0;
     background: #eee no-repeat center / 65% auto;
     box-shadow: 0 0 20px #ccc inset;
-    transition: background-color 0.4s ease-in-out;
+    transition: background-color 0.4s ease-in-out, border-color 0.4s ease-in-out;
+    outline: 0;
   }
+    .menu_button:focus {
+      border-color: #88f;
+    }
     @media (max-width: 600px) {
       .menu_button {
         width: 35px;

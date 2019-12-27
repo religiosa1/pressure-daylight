@@ -1,5 +1,5 @@
 <script>
-  import { latitude, longitude, restoreLocation, saveLocation, state, ClockState} from "./clock.store";
+  import { latitude, longitude, restoreLocation, saveLocation } from "./clock.store";
 
   const hasGeolocationApi = navigator && "geolocation" in navigator;
 
@@ -17,11 +17,6 @@
       geoerror = error;
     });
   }
-
-  function close() {
-    $state = ClockState.default;
-  }
-
 </script>
 
 <div class="place-form">
@@ -66,7 +61,4 @@
       Сохранить координаты
     </button>
   </div> <!-- END .placeSelector -->
-  <button type="button" on:click={close} class="btn close">
-    Закрыть
-  </button>
 </div>

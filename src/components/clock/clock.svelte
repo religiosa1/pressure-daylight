@@ -7,6 +7,7 @@
   import SectionInfo from "./section-info.svelte";
 
   import timeToDeg from "@/utils/time-to-deg.js";
+  import { onKbdCode } from "@/utils/on-kbd.js";
 
   let time = new Date();
 
@@ -42,12 +43,17 @@
     };
   });
 
+
 </script>
 
 
 <div class="clock" transition:slide="{{ duration: 300, easing: quintOut }}">
   <div class="top-marker" class:top-marker-visible={rotated}></div>
-  <div class="dial-wrapper" on:click={toggleRotation} >
+  <div class="dial-wrapper"
+    tabindex=0
+    on:click={toggleRotation}
+    on:keydown={onKbdCode(toggleRotation, ["Space", "Enter", "NumpadEnter"], {preventDefault: true})}
+  >
     <div class="dial-rotater" style={rotationStyles}>
       <Dial on:sectionHover={updateSectionInfo} />
     </div>

@@ -1,7 +1,7 @@
 <script>
 import moment from "moment";
 
-import {dateType, date, manualDow, state, ClockState} from "./clock.store";
+import { dateType, date, manualDow } from "./clock.store";
 
 $: dateFormatted = moment($date).format("YYYY/M/DD");
 let localDow;
@@ -10,10 +10,6 @@ $: if ($dateType === "auto") {
   localDow = moment($date).dayOfYear();
 } else {
   $manualDow = localDow;
-}
-
-function close() {
-  $state = ClockState.default;
 }
 
 </script>
@@ -47,7 +43,4 @@ function close() {
       />
     </p>
   </div>
-  <button type="button" on:click={close} class="btn close">
-    Закрыть
-  </button>
 </div>
