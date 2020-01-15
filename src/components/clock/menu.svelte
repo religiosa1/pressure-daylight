@@ -5,7 +5,7 @@
 
   let menuShown = false;
 
-  $: tableViewTitle = $tableView? "циферблат" : "табличный вид";
+  $: tableViewTitle = $tableView ? "циферблат" : "табличный вид";
 
   export function open() {
     menuShown = true;
@@ -16,6 +16,12 @@
   function toggle() {
     if (menuShown) close();
     else open();
+  }
+  function closing(fn) {
+    return function() {
+      close();
+      fn.call(this, arguments);
+    };
   }
 
   function toggleTableView() {
@@ -39,7 +45,7 @@
   }
 </script>
 
-<aside class="menu">
+<aside class="menu" class:menu-opened={ menuShown }>
   <button
     type="button"
     title={menuShown? 'Закрыть меню' : 'Открыть меню'}
@@ -61,14 +67,14 @@
       class="menu_button placeform"
       class:active={ $state === ClockState.placeform }
       title="Выбор места"
-      on:click={togglePlaceForm}
+      on:click={closing(togglePlaceForm)}
     />
     <button
       type="button"
       class="menu_button dateform"
       class:active={ $state === ClockState.dateform }
       title="Выбор даты"
-      on:click={toggleDateForm}
+      on:click={closing(toggleDateForm)}
     />
   </div>
   {/if}
@@ -79,6 +85,8 @@
   position: absolute;
   top: 10px;
   right: 30px;
+  background: transparent;
+  transition: background-color 0.4s, box-shadow 0.4s;
 }
   .menu_button {
     display: block;
@@ -93,13 +101,23 @@
     transition: background-color 0.4s ease-in-out, border-color 0.4s ease-in-out;
     outline: 0;
   }
+  .menu-dropdown .menu_button:last-of-type { margin-bottom: 0; }
     .menu_button:focus {
       border-color: #88f;
     }
-    @media (max-width: 600px) {
+    @media (max-width: 700px) {
       .menu_button {
         width: 35px;
         height: 35px;
+      }
+      .menu {
+        right: 10px;
+        padding: 10px;
+        border-radius: 35px;
+      }
+      .menu.menu-opened {
+        background: rgba(0,0,0,0.5);
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
       }
     }
     .menu_button:active { transform: translate(1px, 1px); }

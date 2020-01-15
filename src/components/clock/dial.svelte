@@ -10,6 +10,8 @@
 
   const dispatch = createEventDispatcher();
 
+  const FORMAT = "H:mm:ss";
+
   const size = 306;
   const padding = 3;
   const hsize = size/2
@@ -158,7 +160,8 @@
 </script>
 
 <svg class="clock" viewbox="0 0 {size} {size}" xmlns="http://www.w3.org/2000/svg">
-  <title>Отображение времени заката, рассвета и различных состояний сумерек</title>
+  <title>Диаграмма состояний солнца</title>
+  <desc>Отображение времени заката, рассвета и различных состояний сумерек</desc>
   <linearGradient id="grd-astro" x1="0" y1="1" x2="0" y2="0">
     <stop offset="0%" stop-color="#0000aa"></stop>
     <stop offset="100%" stop-color="#000044"></stop>
@@ -198,7 +201,18 @@
       class:highlight={selectedSection == section}
       on:mouseover={()=>sectionHover(section)}
       on:mouseleave={()=>sectionHover()}
-    />
+    >
+      <title>
+        {section.name}
+      </title>
+      <desc>
+        {#if section.time}
+          {moment(section.time).format(FORMAT)}
+        {:else}
+          { moment(section.start).format(FORMAT) }&mdash;{ moment(section.end).format(FORMAT) }
+        {/if}
+      </desc>
+    </path>
     {/each}
   </g>
 

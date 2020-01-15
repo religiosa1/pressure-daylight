@@ -52,7 +52,7 @@ $: xScaleMarkers = Array.from(
     coord: xPos(x),
     secondary: !xScalePrimaryMarkers.has(x),
   })
-);
+).filter(i => i.coord > xOffsetLeft && i.coord < xEdgeRight);
 
 function calculatePath(e) {
   if (!Array.isArray(e)) {
