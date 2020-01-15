@@ -60,7 +60,7 @@
       class="menu_button display-type"
       class:display-type-dial={$tableView}
       title={tableViewTitle}
-      on:click={toggleTableView}
+      on:click={closing(toggleTableView)}
     />
     <button
       type="button"

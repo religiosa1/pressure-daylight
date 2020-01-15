@@ -13,6 +13,15 @@
   function closeSidePane() {
     $state = ClockState.default;
   }
+
+  function onOverlayClick(e) {
+    if (
+      e && e.target && e.target === e.currentTarget &&
+      window.screen.width < 700
+    ) {
+      closeSidePane();
+    }
+  }
   const unsubscribe = state.subscribe(value => {
     if (value === ClockState.default) {
       document.body.classList.remove(bodyClass);
@@ -37,7 +46,7 @@
   </div>
 
   {#if $state !== ClockState.default}
-  <div class="side-form" on:click={ () => window.screen.width < 700 && closeSidePane() }>
+  <div class="side-form" on:click={onOverlayClick}>
     <div class="side-form__wrapper">
       {#if $state === ClockState.placeform}
       <PlaceForm />
