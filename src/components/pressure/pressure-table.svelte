@@ -1,12 +1,12 @@
 <script>
-import moment from "moment";
+import { format } from "date-fns";
 
 export let entries = null;
 
 let precision = 5;
 
 function formatTime(time) {
-  return moment(time).format("YY.MM.DD HH:mm");
+  return format(time, "YY.MM.DD HH:mm");
 }
 
 function formatPres(pres, precision) {

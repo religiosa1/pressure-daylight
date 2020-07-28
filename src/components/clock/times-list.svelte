@@ -1,5 +1,5 @@
 <script>
-  import moment from "moment";
+  import { format as dateFormat, isValid } from "date-fns";
 
   import { suncalc } from "./clock.store";
 
@@ -9,8 +9,7 @@
   const NA = "—/—"
 
   function format(time) {
-    let t = moment(time);
-    return t.isValid()? t.format("H:mm:ss") : NA;
+    return isValid(time)? dateFormat(time, "H:mm:ss") : NA;
   }
 </script>
 

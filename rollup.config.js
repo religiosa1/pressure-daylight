@@ -3,8 +3,8 @@ import { join } from "path";
 import alias from '@rollup/plugin-alias';
 import svelte from 'rollup-plugin-svelte';
 import preprocess from 'svelte-preprocess'
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import autoprefixer from 'autoprefixer';

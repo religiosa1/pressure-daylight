@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import moment from "moment";
+  import { format, startOfDay, endOfDay } from "date-fns";
 
   import { suncalc } from "./clock.store";
 
@@ -14,7 +14,7 @@
 
   const size = 306;
   const padding = 3;
-  const hsize = size/2
+  const hsize = size/2;
   const width = 20;
   const radius = hsize - width/2 - padding;
 
@@ -111,11 +111,11 @@
   $: if (trsections && trsections.length > 0) {
     ringSections = colorizeSections(trsections);
   } else {
-    let cm = moment($suncalc.nadir);
+    let cm = new Date($suncalc.nadir); // check
     let s = {
       id: $suncalc.isWinter? "night" : "day",
-      start: moment(cm).startOf('day').toDate(),
-      end: moment(cm).endOf('day').toDate(),
+      start: startOfDay($suncalc.nadir),
+      end: endOfDay($suncalc.nadir),
     };
     ringSections = colorizeSections([s]);
   }
@@ -159,8 +159,7 @@
   }
 </script>
 
-<svg class="clock" viewbox="0 0 {size} {size}" xmlns="http://www.w3.org/2000/svg">
-  <title>Диаграмма состояний солнца</title>
+<svg class="dial" viewbox="0 0 {size} {size}" xmlns="http://www.w3.org/2000/svg">
   <desc>Отображение времени заката, рассвета и различных состояний сумерек</desc>
   <linearGradient id="grd-astro" x1="0" y1="1" x2="0" y2="0">
     <stop offset="0%" stop-color="#0000aa"></stop>
@@ -198,18 +197,16 @@
       d={calculatePath(section)}
       stroke={section.stroke}
       class={"ring-section ring-section-" + section.id}
-      class:highlight={selectedSection == section}
+      class:highlight={selectedSection === section}
       on:mouseover={()=>sectionHover(section)}
       on:mouseleave={()=>sectionHover()}
     >
-      <title>
-        {section.name}
-      </title>
       <desc>
+        {section.name}
         {#if section.time}
-          {moment(section.time).format(FORMAT)}
+          { format(section.time, FORMAT) }
         {:else}
-          { moment(section.start).format(FORMAT) }&mdash;{ moment(section.end).format(FORMAT) }
+          { format(section.start, FORMAT) }&mdash;{ format(section.end, FORMAT) }
         {/if}
       </desc>
     </path>
@@ -260,7 +257,7 @@
 </svg>
 
 <style>
-  .clock {
+  .dial {
     display: block;
     margin: auto;
   }

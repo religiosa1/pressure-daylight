@@ -1,5 +1,5 @@
 <script>
-import moment from "moment";
+import {startOfDay, startOfHour, format} from "date-fns";
 import range from "@/utils/range.js";
 
 export let entries = null;
@@ -35,20 +35,29 @@ $: startDateVal = (startDate instanceof Date) ? startDate.getTime() : NaN;
 $: nowOffsetedVal = getNowOffseted(startDateVal);
 $: points = calculatePath(entries);
 
+function startOf(d, snap) {
+  switch (snap) {
+    case "day":
+      return startOfDay(d);
+    default:
+      return startOfHour(d);
+  }
+}
+
 $: xScalePrimaryMarkers = new Set(range(
-  moment(startDate).startOf(dateRange.markerSnap).toDate().getTime() + dateRange.markerResolution,
+  startOf(startDate, dateRange.markerSnap).getTime() + dateRange.markerResolution,
   endDate.getTime(),
   dateRange.markerResolution
 ));
 
 $: xScaleMarkers = Array.from(
   range(
-    moment(startDate).startOf(dateRange.markerSnap).toDate().getTime() + dateRange.markerSecondaryResolution,
+    startOf(startDate, dateRange.markerSnap).getTime() + dateRange.markerSecondaryResolution,
     endDate.getTime(),
     dateRange.markerSecondaryResolution
   ),
   x => ({
-    value: moment(x).format(dateRange.format),
+    value: format(x, dateRange.format),
     coord: xPos(x),
     secondary: !xScalePrimaryMarkers.has(x),
   })
@@ -116,7 +125,7 @@ function onMouseLeave() {
 }
 
 function formatTime(time) {
-  return moment(time).format("YYYY.MM.DD HH:mm");
+  return format(time, "YYYY.MM.DD HH:mm");
 }
 
 function formatPres(pres) {

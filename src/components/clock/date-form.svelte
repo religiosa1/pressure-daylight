@@ -1,13 +1,13 @@
 <script>
-import moment from "moment";
+import { format, getDayOfYear } from "date-fns";
 
 import { dateType, date, manualDow } from "./clock.store";
 
-$: dateFormatted = moment($date).format("YYYY/M/DD");
+$: dateFormatted = format($date, "YYYY/M/DD");
 let localDow;
 
 $: if ($dateType === "auto") {
-  localDow = moment($date).dayOfYear();
+  localDow = getDayOfYear($date);
 } else {
   $manualDow = localDow;
 }

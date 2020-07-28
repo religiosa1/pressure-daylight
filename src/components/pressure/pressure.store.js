@@ -1,7 +1,8 @@
+import { parseJSON } from "date-fns";
 import { writable, derived } from 'svelte/store';
-import moment from "moment";
+import { subDays } from "date-fns";
 
-export const startDate = writable(moment().subtract(3, "days").toDate());
+export const startDate = writable(subDays(new Date(), 3));
 export const endDate = writable(null);
 export const pressureEntries = derived(startDate, $startDate => {
   let params;
@@ -11,6 +12,15 @@ export const pressureEntries = derived(startDate, $startDate => {
   return fetch('/api/sensor/default/' + params).then(resp => {
     endDate.set(new Date());
     return resp.json();
+  }).then(resp => {
+    if (!resp || !Array.isArray(resp.data)) {
+      console.error("unexpected server response", resp);
+      return [];
+    }
+    for (let item of resp.data) {
+      item.time = parseJSON(item.time);
+    }
+    return resp;
   });
 });
 

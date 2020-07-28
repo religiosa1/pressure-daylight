@@ -1,12 +1,13 @@
 <script>
-  import moment from "moment";
+  import { format, isValid } from "date-fns";
 
   export let section = null;
 
   const FORMAT = "H:mm:ss"
+  const NA = "--/--";
 
-  $:start = moment(section && section.start).format(FORMAT);
-  $:end = moment(section && section.end).format(FORMAT)
+  $:start = isValid(section && section.start) ? format(section && section.start, FORMAT) : NA;
+  $:end = isValid(section && section.end) ? format(section && section.end, FORMAT) : NA;
 
 </script>
 <style>
@@ -33,7 +34,7 @@
     </p>
     <p class="section-time">
       {#if section.time}
-        {moment(section.time).format(FORMAT)}
+        { format(section.time, FORMAT) }
       {:else}
         <time datetime={start}>{start}</time> &mdash;
         <time datetime={end}>{end}</time>

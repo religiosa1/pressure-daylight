@@ -1,5 +1,5 @@
 <script>
-import moment from "moment";
+import { format, isAfter, isBefore, subDays } from 'date-fns'
 
 import { pressureEntries, startDate, endDate } from "./pressure.store.js";
 import { TimeRanges } from "./time-ranges";
@@ -15,7 +15,7 @@ let displayType = "chart";
 refresh();
 
 function refresh() {
-  $startDate = moment().subtract(dateRange.value, "days").toDate()
+  $startDate = subDays(new Date(), dateRange.value);
 }
 
 function validateEntries(etr) {
@@ -25,8 +25,8 @@ function validateEntries(etr) {
         if (
           !p ||
           !Number.isFinite(p.pressure) ||
-          !moment(p.time).isAfter($startDate) ||
-          !moment(p.time).isBefore($endDate)
+          !isAfter(p.time, $startDate) ||
+          !isBefore(p.time, $endDate)
         ) return false;
         return true;
       });
@@ -60,7 +60,7 @@ function validateEntries(etr) {
     <div class="ctrl-grp refresh-ctrl">
       {#if $endDate}
         <span class="data-timestamp">
-          Данные от { moment($endDate).format("HH:mm:ss") }
+          Данные от { format($endDate, "HH:mm:ss") }
         </span>
       {/if}
       <button type="button" on:click={refresh}>Обновить</button>

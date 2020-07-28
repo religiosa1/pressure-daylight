@@ -1,5 +1,5 @@
 import { writable, readable, derived, get } from 'svelte/store';
-import moment from "moment";
+import { getDayOfYear, setDayOfYear } from "date-fns";
 
 import getTimes from "@/utils/get-times.js";
 
@@ -70,7 +70,7 @@ export const longitude = writable(default_longitude);
 //-----------------------------------------------------------------------------
 
 export const dateType = writable("auto");
-export const manualDow = writable(moment().dayOfYear());
+export const manualDow = writable(getDayOfYear(new Date()));
 export const today = readable(new Date(), set=>{
   let day_to;
   let setDayTO = () => {
@@ -95,7 +95,7 @@ export const date = derived(
   [ dateType, manualDow, today ],
   ([ $dateType, $manualDow, $today] )=> {
     if ($dateType === "manual") {
-      return moment($today).dayOfYear($manualDow);
+      return setDayOfYear(new Date($today), $manualDow);
     } else {
       return $today;
     }
